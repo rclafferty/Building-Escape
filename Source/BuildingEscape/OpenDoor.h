@@ -42,4 +42,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	AActor* actorThatOpens; // Pawn inherits from Actor
+
+	UPROPERTY(EditAnywhere)
+	float doorCloseDelay = 0.4f;
+
+	float lastDoorOpenTime = 0.0f;
 };

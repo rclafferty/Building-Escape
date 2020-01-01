@@ -14,7 +14,6 @@ UPositionReporter::UPositionReporter()
 	// ...
 }
 
-
 // Called when the game starts
 void UPositionReporter::BeginPlay()
 {
@@ -28,7 +27,6 @@ void UPositionReporter::BeginPlay()
 	// ... 
 	
 }
-
 
 // Called every frame
 void UPositionReporter::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

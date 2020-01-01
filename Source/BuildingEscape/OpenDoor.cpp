@@ -20,28 +20,20 @@ void UOpenDoor::BeginPlay()
 
 void UOpenDoor::OpenDoor()
 {
-	// Find the owning actor
-	AActor* owner = GetOwner();
-	FTransform ownerTransform = owner->GetTransform();
-
 	// Create a rotator
 	FRotator newRotation = FRotator(0.0f, openAngle, 0.0f);
 
 	// Set the door rotation
-	owner->SetActorRelativeRotation(newRotation);
+	GetOwner()->SetActorRelativeRotation(newRotation);
 }
 
 void UOpenDoor::CloseDoor()
 {
-	// Find the owning actor
-	AActor* owner = GetOwner();
-	FTransform ownerTransform = owner->GetTransform();
-
 	// Create a rotator
 	FRotator newRotation = FRotator(0.0f, closeAngle, 0.0f);
 
 	// Set the door rotation
-	owner->SetActorRelativeRotation(newRotation);
+	GetOwner()->SetActorRelativeRotation(newRotation);
 }
 
 // Called every frame
@@ -55,8 +47,11 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	{
 		// Open the door
 		OpenDoor();
+		lastDoorOpenTime = GetWorld()->GetTimeSeconds();
 	}
-	else
+
+	// Check if it's time to close the door
+	if (GetWorld()->GetTimeSeconds() - lastDoorOpenTime > doorCloseDelay)
 	{
 		CloseDoor();
 	}
