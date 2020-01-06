@@ -27,12 +27,19 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	void SetupInputComponent();
+
+	void FindPhysicsHandleComponent();
+
 private:
 	// Raycast and grab what's in reach
 	void Grab();
 
 	// Grab is released
 	void Release();
+
+	// Return hit for first physics body in reach
+	const FHitResult GetFirstPhysicsBodyInReach();
 
 	float reach = 100.0f;
 
