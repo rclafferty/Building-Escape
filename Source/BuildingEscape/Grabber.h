@@ -7,6 +7,7 @@
 #include "DrawDebugHelpers.h"
 #include "CollisionQueryParams.h"
 #include "Engine/World.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Grabber.generated.h"
 
 
@@ -27,5 +28,14 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	// Raycast and grab what's in reach
+	void Grab();
+
+	// Grab is released
+	void Release();
+
 	float reach = 100.0f;
+
+	UPhysicsHandleComponent* physicsHandle = nullptr;
+	UInputComponent* inputComponent = nullptr;
 };
