@@ -27,36 +27,18 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// Poll the Trigger Volume
-	if (GetTotalMassOfActorsOnPlate() > 30.0f) // TODO: Make into a parameter
+	if (GetTotalMassOfActorsOnPlate() > TriggerMass) // TODO: Make into a parameter
 	{
 		// Open the door
-		OpenDoor();
-		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
+		// Broadcast event to blueprint
+		OnOpen.Broadcast();
 	}
-
-	// Check if it's time to close the door
-	if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay)
+	// Close the door
+	else
 	{
-		CloseDoor();
+		// Broadcast event to blueprint
+		OnClose.Broadcast();
 	}
-}
-
-void UOpenDoor::OpenDoor() const
-{
-	// Create a rotator
-	FRotator newRotation = FRotator(0.0f, OpenAngle, 0.0f);
-
-	// Set the door rotation
-	GetOwner()->SetActorRelativeRotation(newRotation);
-}
-
-void UOpenDoor::CloseDoor() const
-{
-	// Create a rotator
-	FRotator NewRotation = FRotator(0.0f, CloseAngle, 0.0f);
-
-	// Set the door rotation
-	GetOwner()->SetActorRelativeRotation(NewRotation);
 }
 
 float UOpenDoor::GetTotalMassOfActorsOnPlate() const
