@@ -1,5 +1,3 @@
-
-
 #include "Grabber.h"
 
 // Blank parameter for annotation
@@ -88,7 +86,7 @@ void UGrabber::Release()
 	PhysicsHandle->ReleaseComponent();
 }
 
-const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
+FHitResult UGrabber::GetFirstPhysicsBodyInReach() const
 {
 	// Raycast out to reach distance
 	FHitResult HitResult;
@@ -99,7 +97,7 @@ const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
 	return HitResult;
 }
 
-const FVector UGrabber::GetReachLineStart()
+FVector UGrabber::GetReachLineStart() const
 {
 	FVector PlayerLocation;
 	FRotator PlayerRotation;
@@ -110,7 +108,7 @@ const FVector UGrabber::GetReachLineStart()
 	return PlayerLocation;
 }
 
-const FVector UGrabber::GetReachLineEnd()
+FVector UGrabber::GetReachLineEnd() const
 {
 	FVector PlayerLocation;
 	FRotator PlayerRotation;

@@ -1,5 +1,8 @@
 #include "OpenDoor.h"
 
+// Blank parameter for annotation
+#define OUT 
+
 // Sets default values for this component's properties
 UOpenDoor::UOpenDoor()
 {
@@ -14,8 +17,26 @@ UOpenDoor::UOpenDoor()
 void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
+}
 
-	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
+// Called every frame
+void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	// Poll the Trigger Volume
+	if (GetTotalMassOfActorsOnPlate() > 50.0f) // TODO: Make into a parameter
+	{
+		// Open the door
+		OpenDoor();
+		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
+	}
+
+	// Check if it's time to close the door
+	if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay)
+	{
+		CloseDoor();
+	}
 }
 
 void UOpenDoor::OpenDoor()
@@ -36,23 +57,21 @@ void UOpenDoor::CloseDoor()
 	GetOwner()->SetActorRelativeRotation(NewRotation);
 }
 
-// Called every frame
-void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+float UOpenDoor::GetTotalMassOfActorsOnPlate() const
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	float TotalMass = 0.0f;
 
-	// Poll the Trigger Volume
-	// If ActorThatOpens is in the volume
-	if (PressurePlate->IsOverlappingActor(ActorThatOpens))
+	// Find all the overlapping actors
+	TArray<AActor*> OverlappingActors;
+	PressurePlate->GetOverlappingActors(OverlappingActors);
+
+	// Iterate through them adding their masses
+	for (auto Actor : OverlappingActors)
 	{
-		// Open the door
-		OpenDoor();
-		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
+		auto Component = Actor->FindComponentByClass<UPrimitiveComponent>();
+		TotalMass += Component->GetMass();
 	}
 
-	// Check if it's time to close the door
-	if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay)
-	{
-		CloseDoor();
-	}
+	UE_LOG(LogTemp, Warning, TEXT("Total mass on pressure plate: %f"), (TotalMass));
+	return TotalMass;
 }

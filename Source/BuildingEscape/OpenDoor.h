@@ -7,6 +7,7 @@
 #include "Engine/TriggerVolume.h"
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "OpenDoor.generated.h"
 
 
@@ -31,6 +32,9 @@ private:
 	void OpenDoor();
 	void CloseDoor();
 
+	// Returns total mass in kg
+	float GetTotalMassOfActorsOnPlate() const;
+
 	UPROPERTY(VisibleAnywhere)
 	float OpenAngle = -60.0f;
 
@@ -39,9 +43,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* PressurePlate;
-
-	UPROPERTY(EditAnywhere)
-	AActor* ActorThatOpens; // Pawn inherits from Actor
 
 	UPROPERTY(EditAnywhere)
 	float DoorCloseDelay = 0.4f;
