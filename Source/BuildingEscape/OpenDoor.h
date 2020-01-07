@@ -36,7 +36,7 @@ private:
 	float GetTotalMassOfActorsOnPlate() const;
 
 	UPROPERTY(VisibleAnywhere)
-	float OpenAngle = -60.0f;
+	float OpenAngle = -80.0f;
 
 	UPROPERTY(VisibleAnywhere)
 	float CloseAngle = 0.0f;
