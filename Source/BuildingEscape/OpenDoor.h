@@ -29,8 +29,8 @@ protected:
 
 private:
 
-	void OpenDoor();
-	void CloseDoor();
+	void OpenDoor() const;
+	void CloseDoor() const;
 
 	// Returns total mass in kg
 	float GetTotalMassOfActorsOnPlate() const;
@@ -42,7 +42,7 @@ private:
 	float CloseAngle = 0.0f;
 
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume* PressurePlate;
+	ATriggerVolume* PressurePlate = nullptr;
 
 	UPROPERTY(EditAnywhere)
 	float DoorCloseDelay = 0.4f;

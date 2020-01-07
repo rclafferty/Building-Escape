@@ -1,5 +1,7 @@
 #include "OpenDoor.h"
 
+#define NULLPTR_LOG(ptr) UE_LOG(LogTemp, Error, TEXT("%s was a nullptr on %s"), TEXT(#ptr), *GetOwner()->GetName())
+
 // Blank parameter for annotation
 #define OUT 
 
@@ -39,7 +41,7 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	}
 }
 
-void UOpenDoor::OpenDoor()
+void UOpenDoor::OpenDoor() const
 {
 	// Create a rotator
 	FRotator newRotation = FRotator(0.0f, OpenAngle, 0.0f);
@@ -48,7 +50,7 @@ void UOpenDoor::OpenDoor()
 	GetOwner()->SetActorRelativeRotation(newRotation);
 }
 
-void UOpenDoor::CloseDoor()
+void UOpenDoor::CloseDoor() const
 {
 	// Create a rotator
 	FRotator NewRotation = FRotator(0.0f, CloseAngle, 0.0f);
@@ -61,15 +63,18 @@ float UOpenDoor::GetTotalMassOfActorsOnPlate() const
 {
 	float TotalMass = 0.0f;
 
-	// Find all the overlapping actors
-	TArray<AActor*> OverlappingActors;
-	PressurePlate->GetOverlappingActors(OverlappingActors);
-
-	// Iterate through them adding their masses
-	for (const auto* Actor : OverlappingActors)
+	if (PressurePlate)
 	{
-		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
-		// UE_LOG(LogTemp, Warning, TEXT("%s on pressure plate"), *(Actor->GetName()));
+		// Find all the overlapping actors
+		TArray<AActor*> OverlappingActors;
+		PressurePlate->GetOverlappingActors(OverlappingActors);
+
+		// Iterate through them adding their masses
+		for (const auto* Actor : OverlappingActors)
+		{
+			TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+			// UE_LOG(LogTemp, Warning, TEXT("%s on pressure plate"), *(Actor->GetName()));
+		}
 	}
 
 	// UE_LOG(LogTemp, Warning, TEXT("Total mass on pressure plate: %f"), (TotalMass));
